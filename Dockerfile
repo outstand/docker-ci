@@ -7,6 +7,7 @@ RUN apk add --no-cache \
       bash \
       zsh \
       curl \
+      jq \
       py-pip && \
     pip install docker-compose==${DOCKER_COMPOSE_VERSION} && \
     curl -o /usr/local/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && \
