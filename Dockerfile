@@ -3,8 +3,8 @@ LABEL maintainer="Ryan Schlesinger <ryan@outstand.com>"
 
 ENV DOCKER_COMPOSE_VERSION 1.22.0
 
-RUN addgroup -g 3434 -S ci && \
-    adduser -u 3434 -S -s /bin/bash -G ci ci && \
+RUN addgroup -g 1000 -S ci && \
+    adduser -u 1000 -S -s /bin/bash -G ci ci && \
     apk add --no-cache \
       bash \
       zsh \
