@@ -14,7 +14,7 @@ ENV PATH $GEM_HOME/bin:$BUNDLE_PATH/gems/bin:$PATH
 RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 # (BUNDLE_PATH = GEM_HOME, no need to mkdir/chown both)
 
-ENV DOCKER_COMPOSE_VERSION 1.22.0
+ENV DOCKER_COMPOSE_VERSION 1.24.0
 
 RUN addgroup -g 1000 -S ci && \
     adduser -u 1000 -S -s /bin/bash -G ci ci && \
@@ -27,7 +27,13 @@ RUN addgroup -g 1000 -S ci && \
       jq \
       ruby \
       ruby-bundler \
-      py-pip && \
+      py-pip \
+      python-dev \
+      libffi-dev \
+      openssl-dev \
+      gcc \
+      libc-dev \
+      make && \
     pip install docker-compose==${DOCKER_COMPOSE_VERSION} && \
     echo 'source /etc/profile' > /home/ci/.bashrc && \
     echo 'source /etc/profile' > /home/ci/.bash_profile && \
@@ -36,6 +42,9 @@ RUN addgroup -g 1000 -S ci && \
     echo $'export FIXUID=$(id -u) \n\
            export FIXGID=$(id -g)' > /etc/profile.d/fixuid.sh && \
     chown ci:ci /srv
+
+ENV BUNDLER_VERSION 2.0.1
+   RUN gem install bundler -v ${BUNDLER_VERSION} --force --no-document
 
 USER ci
 WORKDIR /srv
