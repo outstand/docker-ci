@@ -43,9 +43,10 @@ RUN addgroup -g 1000 -S ci && \
            export FIXGID=$(id -g)' > /etc/profile.d/fixuid.sh && \
     chown ci:ci /srv
 
-ENV BUNDLER_VERSION 2.0.1
-   RUN gem install bundler -v ${BUNDLER_VERSION} --force --no-document
-
 USER ci
+
+ENV BUNDLER_VERSION 2.0.1
+RUN gem install bundler -v ${BUNDLER_VERSION} --force --no-document
+
 WORKDIR /srv
 CMD ["/bin/bash"]
