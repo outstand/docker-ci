@@ -51,7 +51,7 @@ RUN mkdir -p /tmp/build && cd /tmp/build \
   && tar -xzf git-lfs.tgz \
   && cp git-lfs /usr/local/bin/ \
   && cd / && rm -rf /tmp/build \
-  && git lfs install
+  && git lfs install --system
 
 USER ci
 
