@@ -43,6 +43,16 @@ RUN addgroup -g 1000 -S ci && \
            export FIXGID=$(id -g)' > /etc/profile.d/fixuid.sh && \
     chown ci:ci /srv
 
+ENV GIT_LFS_VERSION 2.7.2
+ENV GIT_LFS_HASH 89f5aa2c29800bbb71f5d4550edd69c5f83e3ee9e30f770446436dd7f4ef1d4c
+RUN mkdir -p /tmp/build && cd /tmp/build \
+  && curl -sSL -o git-lfs.tgz https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-amd64-v${GIT_LFS_VERSION}.tar.gz \
+  && echo "${GIT_LFS_HASH}  git-lfs.tgz" | sha256sum -c - \
+  && tar -xzf git-lfs.tgz \
+  && cp git-lfs /usr/local/bin/ \
+  && cd / && rm -rf /tmp/build \
+  && git lfs install
+
 USER ci
 
 ENV BUNDLER_VERSION 2.0.1
