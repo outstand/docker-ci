@@ -43,8 +43,8 @@ RUN addgroup -g 1000 -S ci && \
            export FIXGID=$(id -g)' > /etc/profile.d/fixuid.sh && \
     chown ci:ci /srv
 
-ENV GIT_LFS_VERSION 2.7.2
-ENV GIT_LFS_HASH 89f5aa2c29800bbb71f5d4550edd69c5f83e3ee9e30f770446436dd7f4ef1d4c
+ENV GIT_LFS_VERSION 2.8.0
+ENV GIT_LFS_HASH 54054178deea7c97ce58edf9c0a2f79eb30c1e836fbc7e6dece9b2c9ff516863
 RUN mkdir -p /tmp/build && cd /tmp/build \
   && curl -sSL -o git-lfs.tgz https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-amd64-v${GIT_LFS_VERSION}.tar.gz \
   && echo "${GIT_LFS_HASH}  git-lfs.tgz" | sha256sum -c - \
@@ -55,7 +55,7 @@ RUN mkdir -p /tmp/build && cd /tmp/build \
 
 USER ci
 
-ENV BUNDLER_VERSION 2.0.1
+ENV BUNDLER_VERSION 2.0.2
 RUN gem install bundler -v ${BUNDLER_VERSION} --force --no-document
 
 WORKDIR /srv
