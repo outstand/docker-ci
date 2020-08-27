@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker run --rm -it amazon/aws-cli:latest "$@"
+docker run --rm -it -v aws-cli-config:/root/.aws amazon/aws-cli:latest "$@"
