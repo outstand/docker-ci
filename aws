@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker pull amazon/aws-cli:latest
+docker run --rm -it amazon/aws-cli:latest "$@"

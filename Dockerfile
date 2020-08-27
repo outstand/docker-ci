@@ -53,6 +53,8 @@ RUN mkdir -p /tmp/build && cd /tmp/build \
   && cd / && rm -rf /tmp/build \
   && git lfs install --system
 
+COPY aws /usr/local/bin/aws
+
 USER ci
 
 ENV BUNDLER_VERSION 2.1.4
