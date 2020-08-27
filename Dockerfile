@@ -1,4 +1,4 @@
-FROM docker:stable-git
+FROM buildpack-deps:buster
 LABEL maintainer="Ryan Schlesinger <ryan@outstand.com>"
 
 # COPIED FROM ruby:2.5.1-alpine3.7
@@ -16,31 +16,26 @@ RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 
 ENV DOCKER_COMPOSE_VERSION 1.26.2
 
-RUN addgroup -g 1000 -S ci && \
-    adduser -u 1000 -S -s /bin/bash -G ci ci && \
-    addgroup -g 1101 docker && \
-    addgroup ci docker && \
-    apk add --no-cache \
-      bash \
+RUN groupadd -g 1000 --system ci && \
+    useradd -u 1000 -g ci -ms /bin/bash --system ci && \
+    groupadd -g 1101 docker && \
+    usermod -a -G docker ci && \
+    apt-get update && apt-get install -y --no-install-recommends \
       zsh \
-      curl \
       jq \
       ruby \
       ruby-bundler \
-      py3-pip \
       python3-dev \
-      libffi-dev \
-      openssl-dev \
-      gcc \
-      libc-dev \
-      make && \
-    pip install docker-compose==${DOCKER_COMPOSE_VERSION} && \
+      python3-setuptools \
+      python3-pip \
+    && rm -rf /var/lib/apt/lists/* && \
+    pip3 install docker-compose==${DOCKER_COMPOSE_VERSION} && \
     echo 'source /etc/profile' > /home/ci/.bashrc && \
     echo 'source /etc/profile' > /home/ci/.bash_profile && \
     echo 'source /etc/profile' > /root/.bashrc && \
     echo 'source /etc/profile' > /root/.bash_profile && \
-    echo $'export FIXUID=$(id -u) \n\
-           export FIXGID=$(id -g)' > /etc/profile.d/fixuid.sh && \
+    echo 'export FIXUID=$(id -u) \n\
+          export FIXGID=$(id -g)' > /etc/profile.d/fixuid.sh && \
     chown ci:ci /srv
 
 ENV GIT_LFS_VERSION 2.11.0
@@ -53,7 +48,10 @@ RUN mkdir -p /tmp/build && cd /tmp/build \
   && cd / && rm -rf /tmp/build \
   && git lfs install --system
 
-COPY aws /usr/local/bin/aws
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+      unzip awscliv2.zip && \
+      ./aws/install && \
+      rm awscliv2.zip
 
 USER ci
 
