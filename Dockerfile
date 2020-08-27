@@ -14,7 +14,7 @@ ENV PATH $GEM_HOME/bin:$BUNDLE_PATH/gems/bin:$PATH
 RUN mkdir -p "$GEM_HOME" && chmod 777 "$GEM_HOME"
 # (BUNDLE_PATH = GEM_HOME, no need to mkdir/chown both)
 
-ENV DOCKER_COMPOSE_VERSION 1.24.0
+ENV DOCKER_COMPOSE_VERSION 1.26.2
 
 RUN addgroup -g 1000 -S ci && \
     adduser -u 1000 -S -s /bin/bash -G ci ci && \
@@ -27,8 +27,8 @@ RUN addgroup -g 1000 -S ci && \
       jq \
       ruby \
       ruby-bundler \
-      py-pip \
-      python-dev \
+      py3-pip \
+      python3-dev \
       libffi-dev \
       openssl-dev \
       gcc \
@@ -43,8 +43,8 @@ RUN addgroup -g 1000 -S ci && \
            export FIXGID=$(id -g)' > /etc/profile.d/fixuid.sh && \
     chown ci:ci /srv
 
-ENV GIT_LFS_VERSION 2.8.0
-ENV GIT_LFS_HASH 54054178deea7c97ce58edf9c0a2f79eb30c1e836fbc7e6dece9b2c9ff516863
+ENV GIT_LFS_VERSION 2.11.0
+ENV GIT_LFS_HASH 46508eb932c2ec0003a940f179246708d4ddc2fec439dcacbf20ff9e98b957c9
 RUN mkdir -p /tmp/build && cd /tmp/build \
   && curl -sSL -o git-lfs.tgz https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-amd64-v${GIT_LFS_VERSION}.tar.gz \
   && echo "${GIT_LFS_HASH}  git-lfs.tgz" | sha256sum -c - \
@@ -55,7 +55,7 @@ RUN mkdir -p /tmp/build && cd /tmp/build \
 
 USER ci
 
-ENV BUNDLER_VERSION 2.0.2
+ENV BUNDLER_VERSION 2.1.4
 RUN gem install bundler -v ${BUNDLER_VERSION} --force --no-document
 
 WORKDIR /srv
